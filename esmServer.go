@@ -8,7 +8,6 @@ type ESMServer struct {
 
 }
 
-
 func NewESMServer( config models.Config ) (*ESMServer, error) {
 	esm := ESMServer{}
 
@@ -16,8 +15,17 @@ func NewESMServer( config models.Config ) (*ESMServer, error) {
 	return &esm, nil
 }
 
-// Run..... and do stuff.
+
+// queryES queries EventStore
+func (esm *ESMServer) queryES() error {
+
+	return nil
+}
+
+// Run. Constantly pings ES and gets the stats. Then stores them later for query
+// by other systems (probably Grafana).
 func (esm *ESMServer) Run() {
+
 
 }
 
