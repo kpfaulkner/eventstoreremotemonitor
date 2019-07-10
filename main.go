@@ -12,7 +12,7 @@ func main() {
 
 	fmt.Printf("So it begins......\n\n\n")
 
-	configFile := flag.String("config", "", "configfile")
+	configFile := flag.String("config", "config.json", "configfile")
 	flag.Parse()
 
 	config := models.ReadConfig( *configFile )

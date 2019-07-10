@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	log "github.com/golang/glog"
 	"github.com/kpfaulkner/eventstoreremotemonitor/models"
 	"io/ioutil"
-	log "github.com/golang/glog"
 	"net/http"
 	"time"
 )
@@ -28,7 +28,7 @@ func NewStatsCollector( config models.Config, storage StatsStorage ) (*StatsColl
 // TODO(kpfaulkner) confirm if it matters which node?
 func (sc *StatsCollector) queryEventStore() (*models.ProcStats, error) {
 	// just use first server....  figure out more robust logic later. TODO(kpfaulkner)
-	url := fmt.Sprintf("https://%s:%d", sc.config.Servers[0].IP, sc.config.Servers[0].Port)
+	url := fmt.Sprintf("http://%s:%d/stats", sc.config.Servers[0].IP, sc.config.Servers[0].Port)
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
@@ -57,7 +57,7 @@ func (sc *StatsCollector) Collect() error {
     }
 
     // store the stats.... SOMEWHERE....  still need to figure this out.
-		err = sc.storage.Set(*stats)
+		err = sc.storage.Append(*stats)
 		if err != nil {
 			log.Errorf("Unable to store stats %s\n", err.Error())
 		}
