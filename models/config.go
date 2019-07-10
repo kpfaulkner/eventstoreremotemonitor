@@ -10,6 +10,10 @@ type Config struct {
 	Username         string `json:"username"`
 	Password         string `json:"password"`
 	RefreshInSeconds int    `json:"refreshInSeconds"`
+
+	// has list of servers... but really should only require 1.
+	// Will contact the gossip endpoint and get the data from the server.
+	// Will only use other entries here IF the first one appears dead.
 	Servers          []struct {
 		Name string `json:"name"`
 		IP   string `json:"ip"`
