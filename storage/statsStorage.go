@@ -1,12 +1,16 @@
-package main
+package storage
 
 import (
+	"encoding/json"
+	log "github.com/golang/glog"
 	"github.com/kpfaulkner/eventstoreremotemonitor/models"
+	"io/ioutil"
 	"time"
 )
 
 
 // StatsStorage basically a k/v cache....  until I figure something else out.
+// will regularly serialise the data to disk.
 type StatsStorage interface {
 
 	// Append stats
@@ -37,7 +41,56 @@ func NewMemStatsStorage( config models.Config ) (*MemStatsStorage, error) {
 
   ss.statsList = []models.ProcStats{}
 
+  ss.statsList, _ = ss.loadFromDisk()
+
+  // save every minute... just for kicks.
+  go ss.saveEveryCacheEveryNMinutes(1)
+
 	return &ss, nil
+}
+
+
+// saveEveryCacheEveryNMinutes writes the cache out to disk every n minutes.
+func (mms *MemStatsStorage) saveEveryCacheEveryNMinutes( n int ) {
+
+	for {
+		mms.saveToDisk()
+		time.Sleep( time.Duration(n) * time.Minute)
+	}
+}
+
+func (mss *MemStatsStorage) loadFromDisk() ([]models.ProcStats, error) {
+
+	data, err := ioutil.ReadFile( mss.config.CacheSaveLocation)
+	if err != nil {
+		log.Errorf("error %s\n",err.Error())
+		return []models.ProcStats{}, nil
+	}
+
+	procs := []models.ProcStats{}
+
+	json.Unmarshal(data, &procs)
+
+  return procs, nil
+}
+
+func (mss *MemStatsStorage) saveToDisk() error {
+
+	byteArray, err := json.Marshal(mss.statsList)
+	if err != nil {
+		log.Errorf("Unable to serialise the cache....  kaboom %s\n", err.Error())
+		return err
+	}
+
+
+	err = ioutil.WriteFile(mss.config.CacheSaveLocation, byteArray, 0644)
+	if err != nil {
+		log.Errorf("Unable to save cache to disk....  kaboom %s\n", err.Error())
+		return err
+	}
+
+
+  return nil
 }
 
 // Append append data to time list.

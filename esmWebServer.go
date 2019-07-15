@@ -2,19 +2,20 @@ package main
 
 import (
 	"github.com/kpfaulkner/eventstoreremotemonitor/models"
+	"github.com/kpfaulkner/eventstoreremotemonitor/storage"
 	"net/http"
 )
 
 // ESMWebServer will respond to requests (probably from Grafana) about statistics it holds
 // about an EventStore cluster.
 type ESMWebServer struct {
-	config models.Config
-	storage StatsStorage
+	config  models.Config
+	storage storage.StatsStorage
 
 }
 
 // NewESMWebServer create new ESMWebServer... has reference to stats collector.
-func NewESMWebServer( config models.Config, storage StatsStorage) (*ESMWebServer, error) {
+func NewESMWebServer( config models.Config, storage storage.StatsStorage) (*ESMWebServer, error) {
 	esm := ESMWebServer{}
 
 	esm.config = config

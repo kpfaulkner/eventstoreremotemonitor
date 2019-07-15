@@ -1,9 +1,10 @@
 package main
 
 import (
-  "github.com/kpfaulkner/eventstoreremotemonitor/models"
 	"flag"
 	"fmt"
+	"github.com/kpfaulkner/eventstoreremotemonitor/models"
+	storage "github.com/kpfaulkner/eventstoreremotemonitor/storage"
 	"log"
 )
 
@@ -18,7 +19,7 @@ func main() {
 	config := models.ReadConfig( *configFile )
 
 
-	storage, err := NewMemStatsStorage( config )
+	storage, err := storage.NewTableStatsStorage( config )
 	if err != nil {
 		log.Fatalf("Cannot create storage...  kaboom %s\n", err.Error())
 	}

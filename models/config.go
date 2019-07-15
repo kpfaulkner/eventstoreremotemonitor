@@ -10,6 +10,10 @@ type Config struct {
 	Username         string `json:"username"`
 	Password         string `json:"password"`
 	RefreshInSeconds int    `json:"refreshInSeconds"`
+	CacheSaveLocation string `json:"cacheSaveLocation"`
+
+	// DB for storing stats results.
+	DBConnectionString string `json:"dbConnectionString"`
 
 	// has list of servers... but really should only require 1.
 	// Will contact the gossip endpoint and get the data from the server.

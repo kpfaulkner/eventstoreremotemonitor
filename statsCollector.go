@@ -5,6 +5,7 @@ import (
 	"fmt"
 	log "github.com/golang/glog"
 	"github.com/kpfaulkner/eventstoreremotemonitor/models"
+	"github.com/kpfaulkner/eventstoreremotemonitor/storage"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -12,11 +13,11 @@ import (
 
 // StatsCollector queries the ES cluster and gets all the juicy goss about whats happening.
 type StatsCollector struct {
-	config models.Config
-  storage StatsStorage
+	config  models.Config
+  storage storage.StatsStorage
 }
 
-func NewStatsCollector( config models.Config, storage StatsStorage ) (*StatsCollector, error) {
+func NewStatsCollector( config models.Config, storage storage.StatsStorage) (*StatsCollector, error) {
 	sc := StatsCollector{}
 
 	sc.config = config
