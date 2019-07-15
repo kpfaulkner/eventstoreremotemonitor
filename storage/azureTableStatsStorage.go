@@ -26,7 +26,7 @@ func NewTableStatsStorage( config models.Config ) (*TableStatsStorage, error) {
 	ss := TableStatsStorage{}
 	ss.config = config
 
-	client, err := storage.NewBasicClient("eventstoremonitor", "02NjNytXvKxDnHbbkHtUu3P9sfrBBW/PyI14bJeNxar3DgQiFf2tJ1qhEtNFP1tOkIKLJWbs7wucVDc8pxI9yQ==")
+	client, err := storage.NewBasicClient("eventstoremonitor", "")
 
 	if err != nil {
 		log.Fatal("BOOM!!! ", err)
